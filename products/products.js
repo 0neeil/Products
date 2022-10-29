@@ -25,10 +25,10 @@ const updateProducts = (request, response) => {
 
     pool.query('UPDATE products SET id = $1, name = $2, cost = $3, availability = $4 WHERE id = $5', [id, name, cost, availability, oldId], (error, resultst)=>{
         try {
-            response.json('Norm')
+            response.json('The product is updated')
         } catch (error) {
             
-            response.json('Ne Norm')
+            response.json('Update error')
         }
     })
 }
@@ -74,12 +74,28 @@ const buyProducts = (request,response) =>{
 }
 
 const getProducts =  (request, response) => {
-    response.json("work")
+    pool.query('select * from products', (error, results) => {
+      if(error){
+        throw error
+      }
+      response.json(results.rows)
+    })
+
+}
+
+const purchaseHistory = (request, response) =>{
+  pool.query('select * from purchase_history', (error, results) => {
+    if(error){
+      throw error
+    }
+    response.json(results.rows)
+  })
 }
 
 module.exports = {
     addProducts,
     getProducts,
     updateProducts,
-    buyProducts
+    buyProducts,
+    purchaseHistory
 }

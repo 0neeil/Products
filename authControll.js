@@ -65,7 +65,10 @@ const login = (request, response) => {
 const getUsers = (request, response) => {
     try {
         pool.query('SELECT * FROM users', (error, results) => {
-            response.status(200).json(results.rows)
+          if(error){
+            throw error
+          }
+          response.status(200).json(results.rows)
         })
     } catch (error) {
        console.log(error)

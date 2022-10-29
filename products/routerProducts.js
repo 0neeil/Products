@@ -7,6 +7,7 @@ const rolemiddle = require('../middleware/rolemiddle')
 router.post('/product', rolemiddle(['manager', 'admin']), products.addProducts)
 router.post('/product/updateProduct', rolemiddle(['manager', 'admin']), products.updateProducts)
 router.post('/product/buy/:id/:username', rolemiddle(['user', 'manager', 'admin']), products.buyProducts)
+router.get('/purchaseHistory', rolemiddle(['manager', 'admin']), products.purchaseHistory)
 router.get('/product', products.getProducts)
 
 
