@@ -7,5 +7,6 @@ const rolemiddle = require('../node-api-postgres/middleware/rolemiddle')
 router.post('/registration', controll.registration)
 router.post('/login', controll.login)
 router.get('/users', rolemiddle(['manager', 'admin']) ,controll.getUsers)
+router.post('/update', rolemiddle(['manager', 'admin']), controll.setRole)
 
 module.exports = router

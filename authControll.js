@@ -14,12 +14,12 @@ const pool = new Pool({
 
 const registration = async (request, response) => {
     try {
-        const {username, password, role} = request.body
+        const {username, password} = request.body
 
         const salt = await bcrypt.genSalt(7);
         const hashpassword = await bcrypt.hash(password, salt);
       
-        pool.query('INSERT INTO users (username, password, role) VALUES ($1, $2, $3) RETURNING *', [username, hashpassword, role], (error, results) => {
+        pool.query('INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *', [username, hashpassword], (error, results) => {
          try {
           response.status(201).send(`User added with : ${results.rows[0].username}`)
          } catch (error) {
@@ -64,19 +64,32 @@ const login = (request, response) => {
 
 const getUsers = (request, response) => {
     try {
-        pool.query('SELECT * FROM users', (error, results) => {
-          if(error){
-            throw error
-          }
-          response.status(200).json(results.rows)
-        })
+      pool.query('SELECT * FROM users', (error, results) => {
+        if(error){
+          throw error
+        }
+        response.status(200).json(results.rows)
+      })
     } catch (error) {
        console.log(error)
     }
 }
 
+const setRole = (request, response) => {
+    const {username, role} = request.body
+    pool.query('UPDATE users SET role = $1 WHERE username = $2', [role, username], (error, results) =>{
+      try { 
+      response.json(`User ${username} updated`)
+      }
+      catch (error) {
+        console.log(error)
+      }
+    })
+}
+
     module.exports = {
         registration,
         login,
-        getUsers
+        getUsers,
+        setRole
     }

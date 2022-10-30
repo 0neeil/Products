@@ -22,7 +22,6 @@ const addProducts = (request, response) => {
 
 const updateProducts = (request, response) => {
     const {id, name, cost, availability, oldId} = request.body
-
     pool.query('UPDATE products SET id = $1, name = $2, cost = $3, availability = $4 WHERE id = $5', [id, name, cost, availability, oldId], (error, resultst)=>{
         try {
             response.json('The product is updated')
